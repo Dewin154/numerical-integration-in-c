@@ -1,7 +1,5 @@
 /NumericalIntegration/.vs
 
 /NumericalIntegration/NumericalIntegration/x64
-*.vcxproj
-*.filters
 *.user
 /NumericalIntegration/x64/Debug
