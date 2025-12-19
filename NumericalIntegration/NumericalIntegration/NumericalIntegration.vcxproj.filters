@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NumericalIntegration.cpp">
+    <ClCompile Include="NumericalIntegration.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
