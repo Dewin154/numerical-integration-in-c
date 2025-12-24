@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
-#include <math.h>
+#include "NIN_Integration.h"
 
 
 // 4x^4 + 7x^3 - 4x + 14
@@ -18,34 +18,44 @@ float function2(float x)
 	return (float)(sin(x) - 7 * x + 8);
 }
 
-float function3(float (*f)(float x), float *rResult)
-{
-	*rResult = f(2.5);
-	return 0;
-}
 
 void main(void)
 {
-
-	float var = function1(2.5);
-
-	//printf("%f\n", var);
-
-	printf("%f\n", function1(2.5));
-	
+	float (*pFunc)(float x) = &function1;
 	float result = 0;
 	float* pResult = &result;
-	float (*pFunc)(float x) = &function1;
+	int UserChoice;
 
-	function3(pFunc, pResult);
+	printf("Type the number to choose the action:\n");
+	printf("1. Calculate the integral\n");
+	printf("2. Run the tests\n");
+	printf("3. Terminate program\n");
+	scanf_s("%d", &UserChoice);
 
-	printf("result is: %f\n", result);
-
-
-	while (!_kbhit())
+	if (UserChoice == 1) 
 	{
-		Sleep(1);
-	}
 
+		NIN_Rectangle(pFunc, 5, 12, 50, pResult);
+
+		printf("\nResult of Rectangle is: %f", result);
+
+		NIN_Trapezoid(pFunc, 5, 12, 50, pResult);
+
+		printf("\nResult of Trapezoid is: %f", result);
+
+		NIN_Simpson(pFunc, 5, 12, 50, pResult);
+
+		printf("\nResult of Simpson is:   %f", result);
+
+		return 1;
+	} 
+	else if (UserChoice == 2)
+	{
+		return 2;
+	}
+	else 
+	{
+		return 0;
+	}
 
 }
