@@ -3,27 +3,38 @@
 
 
 // prototype
-NIN_Rectangle(float (*function)(float x), short a, short b, short n, float *pResult)
+NIN_Rectangle(const float (*function)(float x), short a, short b, short n, float *pResult)
 {
+	int iErr = E_OK;
 	float coeff = b - a;
-	float coeff_done = coeff / n;
-	float summation = 0;
-	float result = 0;
 
-	for (int i = 0; i < n; i++)
-	{
-		float rectangle_step = a + (i * coeff_done);
-		result = result + function(rectangle_step);
+	if (n == 0) {
+		iErr = E_INVALID_N;
 	}
+	else if (coeff == 0) {
+		iErr = E_INVALID_INTERVAL;
+	}
+	else 
+	{
+		float coeff_done = coeff / n;
+		float summation = 0;
+		float result = 0;
 
-	result = result * coeff_done;
-	*pResult = result;
+		for (int i = 0; i < n; i++)
+		{
+			float rectangle_step = a + (i * coeff_done);
+			result = result + function(rectangle_step);
+		}
 
-	return 0;
+		result = result * coeff_done;
+		*pResult = result;
+	}
+	
+	return iErr;
 }
 
 // prototype
-NIN_Trapezoid(float (*function)(float x), short a, short b, short n, float* pResult)
+NIN_Trapezoid(const float (*function)(float x), short a, short b, short n, float* pResult)
 {
 	float coeff = b - a;
 	coeff = coeff / n;
@@ -47,7 +58,7 @@ NIN_Trapezoid(float (*function)(float x), short a, short b, short n, float* pRes
 }
 
 // prototype
-NIN_Simpson(float (*function)(float x), short a, short b, short n, float* pResult)
+NIN_Simpson(const float (*function)(float x), short a, short b, short n, float* pResult)
 {
 	float coeff = b - a;
 	coeff = coeff / n;

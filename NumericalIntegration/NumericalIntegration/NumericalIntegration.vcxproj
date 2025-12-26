@@ -130,6 +130,7 @@
     <ClCompile Include="TST_TestCases.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="global.h" />
     <ClInclude Include="NIN_Integration.h" />
     <ClInclude Include="TST_TestCases.h" />
   </ItemGroup>
