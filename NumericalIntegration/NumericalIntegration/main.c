@@ -12,10 +12,10 @@ float function1(float x)
 }
 
 
-// sin x - 7x + 8
+// 18 * sin x
 float function2(float x)
 {
-	return (float)(sin(x) - 7 * x + 8);
+	return (float) (18 * sin(x));
 }
 
 
@@ -25,6 +25,7 @@ void main(void)
 	float result = 0;
 	float* pResult = &result;
 	int UserChoice;
+	int iErr = E_OK;
 
 	printf("Type the number to choose the action:\n");
 	printf("1. Calculate the integral\n");
@@ -42,7 +43,7 @@ void main(void)
 
 		printf("\nResult of Trapezoid is: %f", result);
 
-		NIN_Simpson(pFunc, 5, 12, 50, pResult);
+		NIN_Simpson(pFunc, 5, 12, 13, pResult);
 
 		printf("\nResult of Simpson is:   %f", result);
 
@@ -54,7 +55,7 @@ void main(void)
 	}
 	else 
 	{
-		return 0;
+		return E_EXIT;
 	}
 
 }

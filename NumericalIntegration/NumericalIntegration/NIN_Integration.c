@@ -3,30 +3,44 @@
 
 
 // prototype
-NIN_Rectangle(const float (*function)(float x), short a, short b, short n, float *pResult)
+int NIN_Rectangle(const float (*function)(float x), float a, float b, short n, float *pResult)
 {
 	int iErr = E_OK;
-	float coeff = b - a;
+	float intervalDifference = b - a;
 
 	if (n == 0) {
 		iErr = E_INVALID_N;
 	}
-	else if (coeff == 0) {
+	else if (n > MAX_ITERATIONS)
+	{
+		iErr = E_TOO_MANY_ITERATIONS;
+	}
+	else if (intervalDifference <= 0) 
+	{
 		iErr = E_INVALID_INTERVAL;
+	}
+	else if (function == NULL)
+	{
+		iErr = E_FUNCTION_NULL_POINTER;
+	}
+	else if (pResult == NULL) 
+	{
+		iErr = E_VARIABLE_NULL_POINTER;
 	}
 	else 
 	{
-		float coeff_done = coeff / n;
+		float hCoefficient = intervalDifference / n;
 		float summation = 0;
 		float result = 0;
+		float rectangleStep = 0;
 
 		for (int i = 0; i < n; i++)
 		{
-			float rectangle_step = a + (i * coeff_done);
-			result = result + function(rectangle_step);
+			rectangleStep = a + (i * hCoefficient);
+			summation = summation + function(rectangleStep);
 		}
 
-		result = result * coeff_done;
+		result = summation * hCoefficient;
 		*pResult = result;
 	}
 	
@@ -34,64 +48,117 @@ NIN_Rectangle(const float (*function)(float x), short a, short b, short n, float
 }
 
 // prototype
-NIN_Trapezoid(const float (*function)(float x), short a, short b, short n, float* pResult)
+int NIN_Trapezoid(const float (*function)(float x), float a, float b, short n, float *pResult)
 {
-	float coeff = b - a;
-	coeff = coeff / n;
-	float coeff_done = coeff / 2.0;
-	float functionLowerBound = function(a);
-	float functionUpperBound = function(b);
+    int iErr = E_OK;
+    float intervalDifference = b - a;
 
-	float summation = 0;
-	float result = 0;
+    if (n == 0) 
+    {
+        iErr = E_INVALID_N;
+    }
+    else if (n > MAX_ITERATIONS)
+    {
+        iErr = E_TOO_MANY_ITERATIONS;
+    }
+    else if (intervalDifference <= 0)
+    {
+        iErr = E_INVALID_INTERVAL;
+    }
+    else if (function == NULL)
+    {
+        iErr = E_FUNCTION_NULL_POINTER;
+    }
+    else if (pResult == NULL) 
+    {
+        iErr = E_VARIABLE_NULL_POINTER;
+    }
+    else 
+    {
+        float hCoefficient = intervalDifference / n;
+        float termCoefficient = hCoefficient / 2;
+        float functionLowerBound = function(a);
+        float functionUpperBound = function(b);
 
-	for (int i = 1; i < n; i++)
-	{
-		float trapezoid_step = a + (i * coeff);
-		summation = summation + (2 * function(trapezoid_step));
-	}
+        float summation = 0;
+        float result = 0;
+        float trapezoidStep = 0;
 
-	result = functionLowerBound + summation + functionUpperBound;
-	result = coeff_done * result;
-	*pResult = result;
+        for (int i = 1; i < n; i++)
+        {
+            trapezoidStep = a + (i * hCoefficient);
+            summation = summation + (2 * function(trapezoidStep));
+        }
 
+        result = functionLowerBound + summation + functionUpperBound;
+        result = termCoefficient * result;
+        *pResult = result;
+    }
+    
+    return iErr;
 }
 
 // prototype
-NIN_Simpson(const float (*function)(float x), short a, short b, short n, float* pResult)
+int NIN_Simpson(const float (*function)(float x), float a, float b, short n, float* pResult)
 {
-	float coeff = b - a;
-	coeff = coeff / n;
-	float coeff_done = coeff / 3.0;
-	float functionLowerBound = function(a);
-	float functionUpperBound = function(b);
+    int iErr = E_OK;
+    float intervalDifference = b - a;
 
-	float firstSummation = 0;
-	float secondSummation = 0;
-	float result = 0;
+    if (n == 0) 
+    {
+        iErr = E_INVALID_N;
+    }
+    else if (n > MAX_ITERATIONS)
+    {
+        iErr = E_TOO_MANY_ITERATIONS;
+    }
+    else if (intervalDifference <= 0) 
+    {
+        iErr = E_INVALID_INTERVAL;
+    }
+    else if (function == NULL)
+    {
+        iErr = E_FUNCTION_NULL_POINTER;
+    }
+    else if (pResult == NULL)
+    {
+        iErr = E_VARIABLE_NULL_POINTER;
+    }
+    else
+    {
+        float hCoefficient = intervalDifference / n;
+        float termCoefficient = hCoefficient / 3.0f;
+        float functionLowerBound = function(a);
+        float functionUpperBound = function(b);
 
+        float firstSummation = 0;
+        float secondSummation = 0;
+        float result = 0;
+        float simpsonStep = 0;
 
-	for (int i = 1; i <= n / 2; i++)
-	{
-		float simpson_step = a + (2 * i - 1) * coeff;
-		firstSummation = firstSummation + function(simpson_step);
-	}
+        int firstSummationBoundary = n / 2;
+        int secondSummationBoundary = (n / 2) - 1;
 
-	firstSummation = 4 * firstSummation;
+        for (int i = 1; i <= firstSummationBoundary; i++)
+        {
+            simpsonStep = a + (2 * i - 1) * hCoefficient;
+            firstSummation = firstSummation + function(simpsonStep);
+        }
 
-	for (int i = 1; i <= (n / 2) - 1; i++)
-	{
-		float simpson_step = (a + (2 * i) * coeff);
-		secondSummation = secondSummation + function(simpson_step);
-	}
+        firstSummation = 4 * firstSummation;
 
-	secondSummation = 2 * secondSummation;
+        for (int i = 1; i <= secondSummationBoundary; i++)
+        {
+            simpsonStep = a + (2 * i) * hCoefficient;
+            secondSummation = secondSummation + function(simpsonStep);
+        }
 
-	result = functionLowerBound + firstSummation + secondSummation + functionUpperBound;
-	result = coeff_done * result;
+        secondSummation = 2 * secondSummation;
 
-	*pResult = result;
+        result = functionLowerBound + firstSummation + secondSummation + functionUpperBound;
+        result = termCoefficient * result;
+        *pResult = result;
+    }
 
+    return iErr;
 }
-
-// Makro für abs() definieren da integrale nicht negativ sind
