@@ -8,7 +8,8 @@ int NIN_Rectangle(const float (*function)(float x), float a, float b, short n, f
 	int iErr = E_OK;
 	float intervalDifference = b - a;
 
-	if (n == 0) {
+	if (n == 0) 
+    {
 		iErr = E_INVALID_N;
 	}
 	else if (n > MAX_ITERATIONS)
