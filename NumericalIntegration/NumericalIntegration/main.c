@@ -1,134 +1,62 @@
-/**********************************************************************************************************************
-* Filename:    main.c
-* Description: Application to test the NIN_Integration module
-**********************************************************************************************************************/
-
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
-#include <math.h>    /* Wichtig fuer sin() */
-
-#include "global.h"
 #include "NIN_Integration.h"
 
-/* --- Mathematische Test-Funktionen --- */
 
-/* Polynom: 4x^4 + 7x^3 - 4x + 14 */
-float FunctionPolynomial(float x)
+// 4x^4 + 7x^3 - 4x + 14
+float function1(float x)
 {
-    return (float)((4 * pow(x, 4)) + (7 * pow(x, 3)) - (4 * x) + 14);
+	return (float) (4 * x * x * x * x) + (7 * x * x * x) - (4 * x) + 14;
 }
 
-/* Trigonometrie: 18 * sin(x) */
-float FunctionTrig(float x)
+
+// 18 * sin x
+float function2(float x)
 {
-    return (float)(18 * sin(x));
+	return (float) (18 * sin(x));
 }
 
-/* Einfache Parabel fuer Unit Test: x^2 */
-float FunctionSquare(float x)
-{
-    return (float)(x * x);
-}
-
-/* --- Main Program --- */
 
 void main(void)
 {
-    /* Variablen */
-    float (*pFunc)(float x) = &FunctionPolynomial; /* Standardmaessig Polynom */
-    float result = 0.0f;
-    int userChoice = 0;
-    int iErr = E_OK;
+	float (*pFunc)(float x) = &function1;
+	float result = 0;
+	float* pResult = &result;
+	int userChoice;
+	int iErr = E_OK;
 
-    unsigned char ucMaj, ucMin, ucPatch;
+	printf("Type the number to choose the action:\n");
+	printf("1. Calculate the integral\n");
+	printf("2. Run the tests\n");
+	printf("3. Terminate program\n");
+	scanf_s("%d", &userChoice);
 
-    /* 1. Modul Initialisieren (WICHTIG wegen statischer Struktur!) */
-    NIN_Init();
+	if (userChoice == 1) 
+	{
+		/* result speichern und fehlerbehung machen */
+		int calc = NIN_Rectangle(pFunc, 5, 12, 50, pResult);
 
-    /* Version anzeigen */
-    NIN_GetVersion(&ucMaj, &ucMin, &ucPatch);
-    printf("NIN Module Version: %02d.%02d.%02d\n", ucMaj, ucMin, ucPatch);
-    printf("----------------------------------------\n");
+		printf("\nResult of Rectangle is: %f", result);
 
-    /* Menü */
-    printf("Select Action:\n");
-    printf("1. Calculate Integral (Polynomial, 5 to 12, n=50)\n");
-    printf("2. Run Unit Test (x^2 check)\n");
-    printf("3. Terminate program\n");
-    printf("Choice: ");
+		NIN_Trapezoid(pFunc, 5, 12, 50, pResult);
 
-    /* scanf_s ist sicherer fuer Visual Studio */
-    scanf_s("%d", &userChoice);
-    printf("\n");
+		printf("\nResult of Trapezoid is: %f", result);
 
-    if (userChoice == 1)
-    {
-        printf("--- Calculating Polynomial ---\n");
+		NIN_Simpson(pFunc, 5, 12, 50, pResult);
 
-        /* A) Rectangle */
-        iErr = NIN_Rectangle(pFunc, 5.0f, 12.0f, 50, &result);
-        if (iErr == E_OK)
-        {
-            printf("Rectangle Result: %f\n", result);
-        }
-        else
-        {
-            printf("Rectangle Error: %d\n", iErr);
-        }
+		printf("\nResult of Simpson is:   %f", result);
 
-        /* B) Trapezoid */
-        iErr = NIN_Trapezoid(pFunc, 5.0f, 12.0f, 50, &result);
-        if (iErr == E_OK)
-        {
-            printf("Trapezoid Result: %f\n", result);
-        }
-        else
-        {
-            printf("Trapezoid Error: %d\n", iErr);
-        }
+		return 1;
+	} 
+	else if (userChoice == 2)
+	{
+		return 2;
+	}
+	else 
+	{
+		return E_EXIT;
+	}
 
-        /* C) Simpson */
-        iErr = NIN_Simpson(pFunc, 5.0f, 12.0f, 50, &result);
-        if (iErr == E_OK)
-        {
-            printf("Simpson   Result: %f\n", result);
-        }
-        else
-        {
-            printf("Simpson   Error: %d\n", iErr);
-        }
-    }
-    else if (userChoice == 2)
-    {
-        /* Automatischer Test mit bekanntem Ergebnis */
-        printf("--- Running Unit Test (x^2, [0,10]) ---\n");
-        printf("Expected: ~333.3333\n");
-
-        /* Hier nutzen wir die FunctionSquare */
-        NIN_Simpson(FunctionSquare, 0.0f, 10.0f, 100, &result);
-        printf("Simpson Result: %f\n", result);
-
-        if (result > 333.3f && result < 333.4f)
-        {
-            printf("-> TEST PASSED\n");
-        }
-        else
-        {
-            printf("-> TEST FAILED\n");
-        }
-    }
-    else
-    {
-        printf("Exiting...\n");
-    }
-
-    printf("\nPress any key to exit...\n");
-
-    /* Loop aus der PDF Vorgabe, damit Konsole offen bleibt */
-    while (!_kbhit())
-    {
-        Sleep(1);
-    }
 }
