@@ -16,7 +16,7 @@ Component   Global
 
 Filename    global.h
 
-brief       Header file for global things.
+brief       Header file for global things
 
 author      Peter Okruhlica
 
@@ -42,3 +42,7 @@ Version   Date        Sign  Description
 #define E_EXIT					(10)
 
 #endif /* _GLOBAL_H_ */
+
+/**********************************************************************************************************************
+EOF
+**********************************************************************************************************************/
