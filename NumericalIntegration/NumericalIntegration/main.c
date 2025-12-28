@@ -21,7 +21,7 @@ float function2(float x)
 
 void main(void)
 {
-	float (*pFunc)(float x) = &function2;
+	float (*pFunc)(float x) = &function1;
 	float result = 0;
 	float* pResult = &result;
 	int UserChoice;
@@ -35,7 +35,8 @@ void main(void)
 
 	if (UserChoice == 1) 
 	{
-		NIN_Rectangle(pFunc, 5, 12, 50, pResult);
+		// result speichern und fehlerbehung machen
+		int calc = NIN_Rectangle(pFunc, 5, 12, 50, pResult);
 
 		printf("\nResult of Rectangle is: %f", result);
 
@@ -43,7 +44,7 @@ void main(void)
 
 		printf("\nResult of Trapezoid is: %f", result);
 
-		NIN_Simpson(pFunc, 5, 12, 13, pResult);
+		NIN_Simpson(pFunc, 5, 12, 50, pResult);
 
 		printf("\nResult of Simpson is:   %f", result);
 
