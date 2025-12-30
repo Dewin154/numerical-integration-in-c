@@ -15,13 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.c">
+    <ClCompile Include="CON_Controller.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="NIN_Integration.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="TST_TestCases.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="APP_Application.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,6 +36,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="global.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="APP_Application.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

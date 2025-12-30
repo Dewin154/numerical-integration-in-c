@@ -120,14 +120,14 @@ int NIN_Init(void)
 * 
 *   author       Peter Okruhlica
 **********************************************************************************************************************/
-int NIN_Rectangle(const float (*function)(float x), float a, float b, short n, float *pResult)
+int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned short n, float *pResult)
 {
     NIN_GlobalState.rectangleCounter += 1;
 
 	int iErr = E_OK;
 	float intervalDifference = b - a;
 
-	if (n == 0) 
+    if (n == 0)
     {
 		iErr = E_INVALID_N;
 	}
@@ -153,11 +153,12 @@ int NIN_Rectangle(const float (*function)(float x), float a, float b, short n, f
 		float summation = 0;
 		float result = 0;
 		float rectangleStep = 0;
+        float functionResult = 0; 
 
 		for (int i = 0; i < n; i++)
 		{
 			rectangleStep = a + (i * hCoefficient);
-			summation = summation + function(rectangleStep);
+            summation += function(rectangleStep);
 		}
 
 		result = summation * hCoefficient;
@@ -192,14 +193,14 @@ int NIN_Rectangle(const float (*function)(float x), float a, float b, short n, f
 *
 *   author       Peter Okruhlica
 **********************************************************************************************************************/
-int NIN_Trapezoid(const float (*function)(float x), float a, float b, short n, float *pResult)
+int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned short n, float *pResult)
 {
     NIN_GlobalState.trapezoidCounter += 1;
 
     int iErr = E_OK;
     float intervalDifference = b - a;
 
-    if (n == 0) 
+    if (n == 0)
     {
         iErr = E_INVALID_N;
     }
@@ -269,7 +270,7 @@ int NIN_Trapezoid(const float (*function)(float x), float a, float b, short n, f
 *
 *   author       Peter Okruhlica
 **********************************************************************************************************************/
-int NIN_Simpson(const float (*function)(float x), float a, float b, short n, float* pResult)
+int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned short n, float* pResult)
 {
     NIN_GlobalState.simpsonCounter += 1;
 

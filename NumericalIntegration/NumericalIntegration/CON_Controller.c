@@ -2,7 +2,10 @@
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "NIN_Integration.h"
+#include "TST_TestCases.h"
+#include "APP_Application.h"
 
 
 // 4x^4 + 7x^3 - 4x + 14
@@ -19,36 +22,43 @@ float function2(float x)
 }
 
 
-void main(void)
+int main(void)
 {
-	float (*pFunc)(float x) = &function2;
+	float (*pPolynomialFunction) (float x) = &function1;
+	float (*pTrigonometricFunction)(float x) = &function2;
+	float a = -20;
+	float b = 0;
+	int n = 20; // TODO unsigned short führt zu Implicit conversion!
+
+
 	float result = 0;
 	float* pResult = &result;
 	int userChoice;
 	int iErr = E_OK;
 
 	printf("Type the number to choose the action:\n");
-	printf("1. Calculate the integral\n");
-	printf("2. Run the tests\n");
-	printf("3. Terminate program\n");
+	printf("1. Calculate the integral of Polynomial Function\n");
+	printf("2. Calculate the integral of Trigonometric Function\n");
+	printf("3. Run the tests\n");
+	printf("4. Terminate program\n");
 	scanf_s("%d", &userChoice);
 
 	if (userChoice == 1) 
 	{
-		/* result speichern und fehlerbehung machen */
-		short rectangleErrCode = NIN_Rectangle(pFunc, 5, 12, 50, pResult);
+		/* result speichern und fehlerbehebung machen */
+		short rectangleErrCode = NIN_Rectangle(pTrigonometricFunction, a, b, n, pResult);
 
 		printf("\nResult of Rectangle is: %f, ErrCode: %d", result, rectangleErrCode);
 
 		result = 0;
 
-		short trapezoidErrCode = NIN_Trapezoid(pFunc, 5, 12, 1001, pResult);
+		short trapezoidErrCode = NIN_Trapezoid(pTrigonometricFunction, a, b, n, pResult);
 
 		printf("\nResult of Trapezoid is: %f, ErrCode: %d", result, trapezoidErrCode);
 
 		result = 0;
 
-		short simpsonErrCode = NIN_Simpson(pFunc, 5, 12, 50, pResult);
+		short simpsonErrCode = NIN_Simpson(pTrigonometricFunction, a, b, n, pResult);
 
 		printf("\nResult of Simpson is:   %f, ErrCode: %d", result, simpsonErrCode);
 
@@ -57,6 +67,10 @@ void main(void)
 	else if (userChoice == 2)
 	{
 		return 2;
+	}
+	else if (userChoice == 3)
+	{
+		return 3;
 	}
 	else 
 	{

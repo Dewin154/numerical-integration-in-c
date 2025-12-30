@@ -52,11 +52,11 @@ MACROS
 EXTERNAL FUNCTIONS
 **********************************************************************************************************************/
 
-extern int NIN_Rectangle(const float (*function)(float x), float a, float b, short n, float* pResult);
+extern int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned short n, float* pResult);
 
-extern int NIN_Trapezoid(const float (*function)(float x), float a, float b, short n, float* pResult);
+extern int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned short n, float* pResult);
 
-extern int NIN_Simpson(const float (*function)(float x), float a, float b, short n, float* pResult);
+extern int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned short n, float* pResult);
 
 extern int NIN_Init(void);
 
