@@ -5,7 +5,6 @@
 #include <math.h>
 #include "NIN_Integration.h"
 #include "TST_TestAccuracy.h"
-#include "APP_Application.h"
 
 
 // 4x^4 + 7x^3 - 4x + 14
