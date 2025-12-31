@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "NIN_Integration.h"
-#include "TST_TestCases.h"
+#include "TST_TestAccuracy.h"
 #include "APP_Application.h"
 
 
@@ -38,42 +38,34 @@ int main(void)
 	int userChoice;
 	int iErr = E_OK;
 
-	printf("Type the number to choose the action:\n");
+	printf("------NUMERICAL INTEGRATION IN C------\n");
+	printf("Type the number to choose the action:\n\n");
 	printf("1. Calculate the integral of Polynomial Function\n");
 	printf("2. Calculate the integral of Trigonometric Function\n");
-	printf("3. Run the tests\n");
-	printf("4. Terminate program\n");
+	printf("3. Run the tests for Polynomial Function\n");
+	printf("4. Run the tests for Trigonometric Function\n");
+	printf("5. Terminate program\n");
+	printf("--------------------------------------\n");
 	scanf_s("%d", &userChoice);
 
 	if (userChoice == 1) 
 	{
-		/* result speichern und fehlerbehebung machen */
-		short rectangleErrCode = NIN_Rectangle(pTrigonometricFunction, a, b, n, pResult);
 
-		printf("\nResult of Rectangle is: %f, ErrCode: %d", result, rectangleErrCode);
-
-		result = 0;
-
-		short trapezoidErrCode = NIN_Trapezoid(pTrigonometricFunction, a, b, n, pResult);
-
-		printf("\nResult of Trapezoid is: %f, ErrCode: %d", result, trapezoidErrCode);
-
-		result = 0;
-
-		short simpsonErrCode = NIN_Simpson(pTrigonometricFunction, a, b, n, pResult);
-
-		printf("\nResult of Simpson is:   %f, ErrCode: %d", result, simpsonErrCode);
-
-		return 1;
 	} 
 	else if (userChoice == 2)
 	{
-		TST_calculateIntegral(pPolynomialFunction, a, b, array);
+		
 
 	}
 	else if (userChoice == 3)
 	{
-		return 3;
+		TST_calculateAccuracyPolynomial();
+
+	}
+	else if (userChoice == 4)
+	{
+		TST_calculateAccuracyTrigonometric();
+
 	}
 	else 
 	{

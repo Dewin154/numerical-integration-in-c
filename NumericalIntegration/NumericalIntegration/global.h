@@ -34,11 +34,12 @@ Version   Date        Sign  Description
 #define _GLOBAL_H_
 
 #define E_OK					(0)
-#define E_INVALID_N				(-1)
-#define E_INVALID_INTERVAL		(-2)
-#define E_TOO_MANY_ITERATIONS	(-3)
-#define E_FUNCTION_NULL_POINTER	(-4)
-#define E_VARIABLE_NULL_POINTER (-5)
+#define E_NOT_OK				(-1)
+#define E_INVALID_N				(-2)
+#define E_INVALID_INTERVAL		(-3)
+#define E_TOO_MANY_ITERATIONS	(-4)
+#define E_FUNCTION_NULL_POINTER	(-5)
+#define E_VARIABLE_NULL_POINTER (-6)
 #define E_EXIT					(10)
 
 #endif /* _GLOBAL_H_ */

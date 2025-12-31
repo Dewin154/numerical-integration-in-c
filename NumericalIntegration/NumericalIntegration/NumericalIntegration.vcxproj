@@ -129,13 +129,13 @@
     <ClCompile Include="APP_Application.c" />
     <ClCompile Include="CON_Controller.c" />
     <ClCompile Include="NIN_Integration.c" />
-    <ClCompile Include="TST_TestCases.c" />
+    <ClCompile Include="TST_TestAccuracy.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APP_Application.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="NIN_Integration.h" />
-    <ClInclude Include="TST_TestCases.h" />
+    <ClInclude Include="TST_TestAccuracy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
