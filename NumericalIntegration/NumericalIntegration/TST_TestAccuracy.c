@@ -3,21 +3,6 @@
 
 /*Prototype Implementation*/
 
-typedef struct {
-	float results[3];
-    float accuracy[3];
-} t_TST_RectangleResults;
-
-typedef struct {
-	float results[3];
-    float accuracy[3];
-} t_TST_TrapezoidResults;
-
-typedef struct {
-	float results[3];
-    float accuracy[3];
-} t_TST_SimpsonResults;
-
 static t_TST_RectangleResults TST_RectangleResults;
 static t_TST_TrapezoidResults TST_TrapezoidResults;
 static t_TST_SimpsonResults TST_SimpsonResults;
@@ -48,8 +33,18 @@ int TST_runTestTrigonometric(const float (*function)(float x), float a, float b,
     return 0;
 }
 
+int TST_getResults(t_TST_Container* resultsContainer)
+{
+   
+    resultsContainer->rect = TST_RectangleResults;
+    resultsContainer->trap = TST_TrapezoidResults;
+    resultsContainer->simp = TST_SimpsonResults;
+
+    return 0;
+}
+
 //                                                                                              TODO muss abgesichert werden
-int TST_calculateIntegral(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[])
+static int TST_calculateIntegral(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[])
 {
     for (int i = 0; i < 3; i++)
     {
@@ -61,7 +56,7 @@ int TST_calculateIntegral(const float (*function)(float x), float a, float b, co
     return 0;
 }
 
-int TST_calculateAccuracyPolynomial(void)
+static int TST_calculateAccuracyPolynomial(void)
 {
     for (int i = 0; i < 3; i++)
     {
@@ -73,7 +68,7 @@ int TST_calculateAccuracyPolynomial(void)
 	return 0;
 }
 
-int TST_calculateAccuracyTrigonometric(void)
+static int TST_calculateAccuracyTrigonometric(void)
 {
     for (int i = 0; i < 3; i++)
     {
@@ -82,10 +77,5 @@ int TST_calculateAccuracyTrigonometric(void)
         TST_SimpsonResults.accuracy[i] = TST_SimpsonResults.results[i]/ resultTrigonometric;
     }
 
-    return 0;
-}
-
-int TST_getResults(float *resultStruct)
-{
     return 0;
 }

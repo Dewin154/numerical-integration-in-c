@@ -59,13 +59,20 @@ int main(void)
 	}
 	else if (userChoice == 3)
 	{
-		TST_calculateAccuracyPolynomial();
+		TST_runTestPolynomial(pPolynomialFunction, a, b, array);
 
 	}
 	else if (userChoice == 4)
 	{
-		TST_calculateAccuracyTrigonometric();
+		t_TST_Container testResults;
 
+		TST_runTestPolynomial(pTrigonometricFunction, a, b, array);
+
+		TST_getResults(&testResults);
+
+		float erstesSimpErgebnis = testResults.rect.results[0];
+
+		printf("%f", erstesSimpErgebnis);
 	}
 	else 
 	{
