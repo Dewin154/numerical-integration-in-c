@@ -26,9 +26,11 @@ int main(void)
 {
 	float (*pPolynomialFunction) (float x) = &function1;
 	float (*pTrigonometricFunction)(float x) = &function2;
-	float a = -20;
-	float b = 0;
+	float a = 0;
+	float b = 20;
 	int n = 20; // TODO unsigned short führt zu Implicit conversion!
+
+	const short array[3] = { 10, 50, 100 };
 
 
 	float result = 0;
@@ -66,7 +68,8 @@ int main(void)
 	} 
 	else if (userChoice == 2)
 	{
-		return 2;
+		TST_calculateIntegral(pPolynomialFunction, a, b, array);
+
 	}
 	else if (userChoice == 3)
 	{
