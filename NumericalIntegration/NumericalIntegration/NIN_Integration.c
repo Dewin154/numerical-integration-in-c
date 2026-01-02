@@ -31,6 +31,7 @@ Version   Date        Sign  Description
 01.00.01  2025-12-24  PO   Prototype implementation of integration
 01.01.00  2025-12-26  PO   Refining structure in context of embedded development
 01.01.01  2025-12-28  PO   Adding unified comments
+01.01.02  2025-01-02  PO   Remove dead code
 
 **********************************************************************************************************************/
 
@@ -58,9 +59,6 @@ typedef struct {
     int rectangleLastError;
     int trapezoidLastError;
     int simpsonLastError;
-    unsigned int rectangleCounter;
-    unsigned int trapezoidCounter;
-    unsigned int simpsonCounter;
 
 }t_NIN_GlobalState;
 
@@ -88,10 +86,6 @@ int NIN_Init(void)
     NIN_GlobalState.rectangleLastError = E_OK;
     NIN_GlobalState.trapezoidLastError = E_OK;
     NIN_GlobalState.simpsonLastError = E_OK;
-
-    NIN_GlobalState.rectangleCounter = 0;
-    NIN_GlobalState.trapezoidCounter = 0;
-    NIN_GlobalState.simpsonCounter = 0;
 
     return iErr;
 }
@@ -122,7 +116,6 @@ int NIN_Init(void)
 **********************************************************************************************************************/
 int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned short n, float *pResult)
 {
-    NIN_GlobalState.rectangleCounter += 1;
 
 	int iErr = E_OK;
 	float intervalDifference = b - a;
@@ -195,7 +188,6 @@ int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned s
 **********************************************************************************************************************/
 int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned short n, float *pResult)
 {
-    NIN_GlobalState.trapezoidCounter += 1;
 
     int iErr = E_OK;
     float intervalDifference = b - a;
@@ -223,7 +215,7 @@ int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned s
     else 
     {
         float hCoefficient = intervalDifference / n;
-        float termCoefficient = hCoefficient / 2;
+        float termCoefficient = hCoefficient / 2.0F;
         float functionLowerBound = function(a);
         float functionUpperBound = function(b);
 
@@ -234,7 +226,7 @@ int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned s
         for (int i = 1; i < n; i++)
         {
             trapezoidStep = a + (i * hCoefficient);
-            summation = summation + (2 * function(trapezoidStep));
+            summation += (2 * function(trapezoidStep));
         }
 
         result = functionLowerBound + summation + functionUpperBound;
@@ -272,7 +264,6 @@ int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned s
 **********************************************************************************************************************/
 int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned short n, float* pResult)
 {
-    NIN_GlobalState.simpsonCounter += 1;
 
     int iErr = E_OK;
     float intervalDifference = b - a;
@@ -300,7 +291,7 @@ int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned sho
     else
     {
         float hCoefficient = intervalDifference / n;
-        float termCoefficient = hCoefficient / 3.0f;
+        float termCoefficient = hCoefficient / 3.0F;
         float functionLowerBound = function(a);
         float functionUpperBound = function(b);
 
@@ -315,7 +306,7 @@ int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned sho
         for (int i = 1; i <= firstSummationBoundary; i++)
         {
             simpsonStep = a + ((2 * i - 1) * hCoefficient);
-            firstSummation = firstSummation + function(simpsonStep);
+            firstSummation += function(simpsonStep);
         }
 
         firstSummation = 4 * firstSummation;
@@ -323,7 +314,7 @@ int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned sho
         for (int i = 1; i <= secondSummationBoundary; i++)
         {
             simpsonStep = a + ((2 * i) * hCoefficient);
-            secondSummation = secondSummation + function(simpsonStep);
+            secondSummation += function(simpsonStep);
         }
 
         secondSummation = 2 * secondSummation;

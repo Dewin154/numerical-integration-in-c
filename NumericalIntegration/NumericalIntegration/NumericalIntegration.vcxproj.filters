@@ -21,7 +21,7 @@
     <ClCompile Include="NIN_Integration.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="TST_TestAccuracy.c">
+    <ClCompile Include="APP_Application.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,7 +29,7 @@
     <ClInclude Include="NIN_Integration.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="TST_TestAccuracy.h">
+    <ClInclude Include="APP_Application.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="global.h">
