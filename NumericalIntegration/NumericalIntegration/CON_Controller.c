@@ -28,6 +28,10 @@ int main(void)
 
 	float (*pPolynomialFunction) (float x) = &function1;
 	float (*pTrigonometricFunction)(float x) = &function2;
+
+	const float resultPolynomial = 2839480.0F;
+	const float resultTrigonometric = 10.654F;
+
 	const short a = 0;
 	const short b = 20;
 
@@ -85,7 +89,7 @@ int main(void)
 	}
 	else if (userChoice == 3)
 	{
-		iErr = APP_runTestPolynomial(pPolynomialFunction, a, b, array, &APP_TestResults);
+		iErr = APP_runTestPolynomial(pPolynomialFunction, a, b, array, &resultPolynomial, &APP_TestResults);
 
 		if (iErr != E_OK)
 		{
@@ -106,7 +110,7 @@ int main(void)
 	}
 	else if (userChoice == 4)
 	{
-		iErr = APP_runTestTrigonometric(pTrigonometricFunction, a, b, array, &APP_TestResults);
+		iErr = APP_runTestTrigonometric(pTrigonometricFunction, a, b, array, &resultTrigonometric, &APP_TestResults);
 
 		if (iErr != E_OK)
 		{

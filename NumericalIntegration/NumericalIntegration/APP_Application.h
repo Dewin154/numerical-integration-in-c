@@ -27,8 +27,8 @@ typedef struct {
 	float resultSimpson;
 } t_APP_SingleResult;
 
-extern int APP_runTestPolynomial(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], t_APP_ContainerResults* pDest);
+extern int APP_runTestPolynomial(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], const float *resultPolynomial, t_APP_ContainerResults* pDest);
 
-extern int APP_runTestTrigonometric(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], t_APP_ContainerResults* pDest);
+extern int APP_runTestTrigonometric(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], const float *resultTrigonometric, t_APP_ContainerResults* pDest);
 
 extern int APP_calculateIntegral(const float (*function)(float x), float a, float b, unsigned short n, t_APP_SingleResult* pResult);

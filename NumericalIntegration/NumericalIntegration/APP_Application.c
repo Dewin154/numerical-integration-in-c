@@ -2,13 +2,11 @@
 #include "NIN_Integration.h"
 
 
-const float resultPolynomial = 2839480.0F;
-const float resultTrigonometric = 10.654F;
-
 int APP_calculateIntegral(const float (*function)(float x), float a, float b, unsigned short n, t_APP_SingleResult* pResult)
 {
     int iErr = E_OK;
 
+    /*Fehlerbehandlung!*/
     int iErrRect = NIN_Rectangle(function, a, b, n, &pResult->resultRectangle);
     int iErrTrap = NIN_Trapezoid(function, a, b, n, &pResult->resultTrapezoid);
     int iErrSimp = NIN_Simpson(function, a, b, n, &pResult->resultSimpson);
@@ -17,7 +15,7 @@ int APP_calculateIntegral(const float (*function)(float x), float a, float b, un
     
 }
 
-int APP_runTestPolynomial(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], t_APP_ContainerResults* pDest)
+int APP_runTestPolynomial(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], const float *resultPolynomial, t_APP_ContainerResults* pDest)
 {
     NIN_Init();
 
@@ -40,15 +38,16 @@ int APP_runTestPolynomial(const float (*function)(float x), float a, float b, co
             pDest->trapezoid.results[i] = tempResult.resultTrapezoid;
             pDest->simpson.results[i] = tempResult.resultSimpson;
 
-            pDest->rectangle.accuracy[i] = (pDest->rectangle.results[i] / resultPolynomial) * 100.0F;
-            pDest->trapezoid.accuracy[i] = (pDest->trapezoid.results[i] / resultPolynomial) * 100.0F;
-            pDest->simpson.accuracy[i] = (pDest->simpson.results[i] / resultPolynomial) * 100.0F;
+            /*Absichern! Division durch 0!!!*/
+            pDest->rectangle.accuracy[i] = (pDest->rectangle.results[i] / *resultPolynomial) * 100.0F;
+            pDest->trapezoid.accuracy[i] = (pDest->trapezoid.results[i] / *resultPolynomial) * 100.0F;
+            pDest->simpson.accuracy[i] = (pDest->simpson.results[i] / *resultPolynomial) * 100.0F;
         }
     }
     return iErr;
 }
 
-int APP_runTestTrigonometric(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], t_APP_ContainerResults* pDest)
+int APP_runTestTrigonometric(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], const float* resultTrigonometric, t_APP_ContainerResults* pDest)
 {
     NIN_Init();
 
@@ -71,9 +70,10 @@ int APP_runTestTrigonometric(const float (*function)(float x), float a, float b,
             pDest->trapezoid.results[i] = tempResult.resultTrapezoid;
             pDest->simpson.results[i] = tempResult.resultSimpson;
 
-            pDest->rectangle.accuracy[i] = (pDest->rectangle.results[i] / resultTrigonometric) * 100.0F;
-            pDest->trapezoid.accuracy[i] = (pDest->trapezoid.results[i] / resultTrigonometric) * 100.0F;
-            pDest->simpson.accuracy[i] = (pDest->simpson.results[i] / resultTrigonometric) * 100.0F;
+            /*Absichern! Division durch 0!!!*/
+            pDest->rectangle.accuracy[i] = (pDest->rectangle.results[i] / *resultTrigonometric) * 100.0F;
+            pDest->trapezoid.accuracy[i] = (pDest->trapezoid.results[i] / *resultTrigonometric) * 100.0F;
+            pDest->simpson.accuracy[i] = (pDest->simpson.results[i] / *resultTrigonometric) * 100.0F;
         }
     }
     return iErr;
