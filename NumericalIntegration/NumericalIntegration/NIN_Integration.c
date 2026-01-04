@@ -114,7 +114,7 @@ int NIN_Init(void)
 * 
 *   author       Peter Okruhlica
 **********************************************************************************************************************/
-int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned short n, float *pResult)
+int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult)
 {
 
 	int iErr = E_OK;
@@ -185,7 +185,7 @@ int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned s
 *
 *   author       Peter Okruhlica
 **********************************************************************************************************************/
-int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned short n, float *pResult)
+int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult)
 {
 
     int iErr = E_OK;
@@ -261,7 +261,7 @@ int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned s
 *
 *   author       Peter Okruhlica
 **********************************************************************************************************************/
-int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned short n, float* pResult)
+int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult)
 {
 
     int iErr = E_OK;
