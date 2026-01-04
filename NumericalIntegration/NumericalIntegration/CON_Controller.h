@@ -12,11 +12,11 @@
 *                                                                                                                     *
 ***********************************************************************************************************************
 
-Component   Application (APP)
+Component   Controller (CON)
 
-Filename    APP_Application.h
+Filename    CON_Controller.h
 
-brief       Header file for the application module. Defines result structures and interfaces.
+brief       Header file for the Controller module. 
 
 author      Peter Okruhlica
 
@@ -26,59 +26,20 @@ author      Peter Okruhlica
 
 Version   Date        Sign  Description
 --------  ----------  ----  -----------
-01.00.00  2025-12-31  PO    Initial check in, prototype TST module and architecture change
-01.00.01  2026-01-02  PO    Heavy refactoring of error handling and structure usage
-01.01.00  2026-01-03  PO    Moved constants to CON Module to improve reusability
+01.00.00  2026-01-04  PO    Initial check in
 
 **********************************************************************************************************************/
 
-#ifndef _APP_APPLICATION_H_ /* Include Guard */
-#define _APP_APPLICATION_H_
-
-/**********************************************************************************************************************
-TYPEDEFS
-**********************************************************************************************************************/
-
-typedef struct {
-    float results[3];
-    float accuracy[3];
-} t_APP_RectangleResults;
-
-typedef struct {
-    float results[3];
-    float accuracy[3];
-} t_APP_TrapezoidResults;
-
-typedef struct {
-    float results[3];
-    float accuracy[3];
-} t_APP_SimpsonResults;
-
-typedef struct {
-    t_APP_RectangleResults rectangle;
-    t_APP_TrapezoidResults trapezoid;
-    t_APP_SimpsonResults simpson;
-} t_APP_ContainerResults;
-
-typedef struct {
-    float resultRectangle;
-    float resultTrapezoid;
-    float resultSimpson;
-} t_APP_SingleResult;
+#ifndef _CON_CONTROLLER_H_ /* Include Guard */
+#define _CON_CONTROLLER_H_
 
 /**********************************************************************************************************************
 EXTERNAL FUNCTIONS
 **********************************************************************************************************************/
 
-extern int APP_RunTestPolynomial(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], const float* resultPolynomial, t_APP_ContainerResults* pDest);
+extern int CON_GetVersion(unsigned char* major, unsigned char* minor, unsigned char* patch);
 
-extern int APP_RunTestTrigonometric(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], const float* resultTrigonometric, t_APP_ContainerResults* pDest);
-
-extern int APP_CalculateIntegral(const float (*function)(float x), float a, float b, unsigned short n, t_APP_SingleResult* pResult);
-
-extern int APP_GetVersion(unsigned char* major, unsigned char* minor, unsigned char* patch);
-
-#endif /* _APP_APPLICATION_H_ */
+#endif /* _CON_CONTROLLER_H_ */
 
 /**********************************************************************************************************************
 EOF

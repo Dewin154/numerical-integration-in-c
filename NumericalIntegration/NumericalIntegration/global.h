@@ -27,6 +27,7 @@ author      Peter Okruhlica
 Version   Date        Sign  Description
 --------  ----------  ----  -----------
 01.00.00  2025-12-26  PO    Initial check in
+01.00.01  2026-01-04  PO    Add NUM_TEST_CASES
 
 **********************************************************************************************************************/
 
@@ -41,6 +42,8 @@ Version   Date        Sign  Description
 #define E_FUNCTION_NULL_POINTER	(-5)
 #define E_VARIABLE_NULL_POINTER (-6)
 #define E_EXIT					(10)
+
+#define NUM_TEST_CASES			(3)
 
 #endif /* _GLOBAL_H_ */
 

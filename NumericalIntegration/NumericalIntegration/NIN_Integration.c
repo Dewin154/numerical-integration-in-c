@@ -2,14 +2,14 @@
 
 ***********************************************************************************************************************
 *                                                                                                                     *
-*    Copyright (c) 2025, xxx. All rights reserved!                                                                    *
+* Copyright (c) 2025, Your Company. All rights reserved!                                                              *
 *                                                                                                                     *
-*    All rights exclusively reserved for xxx, unless expressly otherwise agreed.                                      *
+* All rights exclusively reserved for Your Company, unless expressly otherwise agreed.                                *
 *                                                                                                                     *
-*    Redistribution in source or any other form, with or without modification, is not permitted.                      *
+* Redistribution in source or any other form, with or without modification, is not permitted.                         *
 *                                                                                                                     *
-*    You may use this code under the according license terms of xxx. Please contact xxx                               *
-*    to get the appropriate terms and conditions.                                                                     *
+* You may use this code under the according license terms of Your Company. Please contact Your Company                *
+* to get the appropriate terms and conditions.                                                                        *
 *                                                                                                                     *
 ***********************************************************************************************************************
 
@@ -329,7 +329,7 @@ int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned sho
 }
 
 /*********************************************************************************************************************/
-/* brief        Returns the current version of the NIN module.
+/* brief       Returns the current version of the NIN module.
 *
 * param[out]   major   Pointer to store the major version number
 * param[out]   minor   Pointer to store the minor version number

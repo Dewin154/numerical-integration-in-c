@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h" />
+    <ClInclude Include="CON_Controller.h" />
     <ClInclude Include="NIN_Integration.h" />
     <ClInclude Include="APP_Application.h" />
   </ItemGroup>
