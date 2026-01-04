@@ -146,7 +146,6 @@ int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned s
 		float summation = 0;
 		float result = 0;
 		float rectangleStep = 0;
-        float functionResult = 0; 
 
 		for (int i = 0; i < n; i++)
 		{

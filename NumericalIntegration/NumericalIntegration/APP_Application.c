@@ -111,7 +111,7 @@ int APP_CalculateIntegral(const float (*function)(float x), float a, float b, un
 *
 * author       Peter Okruhlica
 **********************************************************************************************************************/
-int APP_RunTestPolynomial(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], const float* resultPolynomial, t_APP_ContainerResults* pDest)
+int APP_RunTestPolynomial(const float (*function)(float x), float a, float b, const unsigned short * const arrayOfN, const float* const resultPolynomial, t_APP_ContainerResults* pDest)
 {
     NIN_Init();
 
@@ -161,7 +161,7 @@ int APP_RunTestPolynomial(const float (*function)(float x), float a, float b, co
 *
 * author       Peter Okruhlica
 **********************************************************************************************************************/
-int APP_RunTestTrigonometric(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], const float* resultTrigonometric, t_APP_ContainerResults* pDest)
+int APP_RunTestTrigonometric(const float (*function)(float x), float a, float b, const unsigned short * const arrayOfN, const float * const resultTrigonometric, t_APP_ContainerResults* pDest)
 {
     NIN_Init();
 

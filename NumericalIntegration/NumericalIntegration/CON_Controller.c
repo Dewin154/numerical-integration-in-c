@@ -65,7 +65,7 @@ FUNCTIONS
 *
 * author       Peter Okruhlica
 **********************************************************************************************************************/
-float function1(float x)
+float Function1(float x)
 {
     return (float)(4 * x * x * x * x) + (7 * x * x * x) - (4 * x) + 14;
 }
@@ -73,13 +73,13 @@ float function1(float x)
 /*********************************************************************************************************************/
 /* Mathematical trigonometric function: f(x) = 18 * sin(x)
 *
-* param[in]    x     Input value (in radians)
+* param[in]    x     Input value
 *
 * retval       float calculated value f(x)
 *
 * author       Peter Okruhlica
 **********************************************************************************************************************/
-float function2(float x)
+float Function2(float x)
 {
     return (float)(18 * sin(x));
 }
@@ -134,8 +134,8 @@ int main(void)
     t_APP_ContainerResults APP_TestResults;
     t_APP_SingleResult APP_SingleResult;
 
-    float (*pPolynomialFunction) (float x) = &function1;
-    float (*pTrigonometricFunction) (float x) = &function2;
+    float (*pPolynomialFunction) (float x) = &Function1;
+    float (*pTrigonometricFunction) (float x) = &Function2;
 
     const float resultPolynomial = 2839480.0F;
     const float resultTrigonometric = 10.654F;
@@ -144,7 +144,7 @@ int main(void)
     const short b = 20;
 
     const unsigned short n = 10;
-    const unsigned short array[3] = { 10, 50, 100 };
+    const unsigned short testSteps[3] = { 10, 50, 100 };
 
     int userChoice;
     int iErr = E_OK;
@@ -204,7 +204,7 @@ int main(void)
         }
         else if (userChoice == 3)
         {
-            iErr = APP_RunTestPolynomial(pPolynomialFunction, a, b, array, &resultPolynomial, &APP_TestResults);
+            iErr = APP_RunTestPolynomial(pPolynomialFunction, a, b, testSteps, &resultPolynomial, &APP_TestResults);
             if (iErr != E_OK)
             {
                 printf("Error while running polynomial test!\n\n");
@@ -214,7 +214,7 @@ int main(void)
                 printf("--- Accuracy Results (Polynomial) ---\n");
                 for (int i = 0; i < NUM_TEST_CASES; i++)
                 {
-                    printf("\nN = %d:\n", array[i]);
+                    printf("\nN = %d:\n", testSteps[i]);
                     printf("Rectangle: %.3f%%\n", APP_TestResults.rectangle.accuracy[i]);
                     printf("Trapezoid: %.3f%%\n", APP_TestResults.trapezoid.accuracy[i]);
                     printf("Simpson:   %.3f%%\n", APP_TestResults.simpson.accuracy[i]);
@@ -223,7 +223,7 @@ int main(void)
         }
         else if (userChoice == 4)
         {
-            iErr = APP_RunTestTrigonometric(pTrigonometricFunction, a, b, array, &resultTrigonometric, &APP_TestResults);
+            iErr = APP_RunTestTrigonometric(pTrigonometricFunction, a, b, testSteps, &resultTrigonometric, &APP_TestResults);
 
             if (iErr != E_OK)
             {
@@ -234,7 +234,7 @@ int main(void)
                 printf("--- Accuracy Results (Trigonometric) ---\n");
                 for (int i = 0; i < NUM_TEST_CASES; i++)
                 {
-                    printf("\nN = %d:\n", array[i]);
+                    printf("\nN = %d:\n", testSteps[i]);
                     printf("Rectangle: %.3f%%\n", APP_TestResults.rectangle.accuracy[i]);
                     printf("Trapezoid: %.3f%%\n", APP_TestResults.trapezoid.accuracy[i]);
                     printf("Simpson:   %.3f%%\n", APP_TestResults.simpson.accuracy[i]);
