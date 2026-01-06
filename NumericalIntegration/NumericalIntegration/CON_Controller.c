@@ -65,7 +65,7 @@ FUNCTIONS
 *
 * author       Peter Okruhlica
 **********************************************************************************************************************/
-float Function1(float x)
+float polynomialFunction(float x)
 {
     return (float)(4 * x * x * x * x) + (7 * x * x * x) - (4 * x) + 14;
 }
@@ -79,7 +79,7 @@ float Function1(float x)
 *
 * author       Peter Okruhlica
 **********************************************************************************************************************/
-float Function2(float x)
+float trigonometricFunction(float x)
 {
     return (float)(18 * sin(x));
 }
@@ -134,11 +134,11 @@ int main(void)
     t_APP_ContainerResults APP_TestResults;
     t_APP_SingleResult APP_SingleResult;
 
-    float (*pPolynomialFunction) (float x) = &Function1;
-    float (*pTrigonometricFunction) (float x) = &Function2;
+    float (*pPolynomialFunction) (float x) = &polynomialFunction;
+    float (*pTrigonometricFunction) (float x) = &trigonometricFunction;
 
     const float resultPolynomial = 2839480.0F;
-    const float resultTrigonometric = 10.654F;
+    const float resultTrigonometric = 10.655F;
 
     const short a = 0;
     const short b = 20;

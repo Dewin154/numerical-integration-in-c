@@ -40,6 +40,7 @@ INCLUDES
 **********************************************************************************************************************/
 
 #include "NIN_Integration.h"
+#include "NIN_Integration_cfg.h"
 #include <stddef.h>  /* To check for NULL */
 
 /**********************************************************************************************************************
@@ -118,7 +119,7 @@ int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned s
 {
 
 	int iErr = E_OK;
-	float intervalDifference = b - a;
+    float intervalDifference = b - a;
 
     if (n == 0)
     {
