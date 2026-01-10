@@ -41,7 +41,6 @@ Version   Date        Sign  Description
 #define E_TOO_MANY_ITERATIONS	(-4)
 #define E_FUNCTION_NULL_POINTER	(-5)
 #define E_VARIABLE_NULL_POINTER (-6)
-#define E_STRUCT_NULL_POINTER	(-7)
 #define E_EXIT					(-10)
 
 #define NUM_TEST_CASES			(3)

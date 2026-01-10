@@ -87,7 +87,7 @@ FUNCTIONS
 **********************************************************************************************************************/
 
 /*********************************************************************************************************************/
-/* Mathematical polynomial function: f(x) = 4x^4 + 7x^3 - 4x + 14
+/* brief       Mathematical polynomial function: f(x) = 4x^4 + 7x^3 - 4x + 14
 *
 * param[in]    x     Input value
 *
@@ -101,7 +101,7 @@ float polynomialFunction(float x)
 }
 
 /*********************************************************************************************************************/
-/* Mathematical trigonometric function: f(x) = 18 * sin(x)
+/* brief       Mathematical trigonometric function: f(x) = 18 * sin(x)
 *
 * param[in]    x     Input value
 *
@@ -115,7 +115,7 @@ float trigonometricFunction(float x)
 }
 
 /*********************************************************************************************************************/
-/* Initializes the CON module configuration with default values.
+/* brief       Initializes the CON module configuration with default values.
 *
 * retval       E_OK    Initialization successful
 *
@@ -150,7 +150,7 @@ int CON_Init(void)
 * Calls the APP module to perform calculations and displays the results.
 *
 * retval        E_OK    Program finished successfully
-* retval        E_EXIT  Program terminated by user or error
+* retval        < 0     Program terminated by user or error
 *
 * author        Peter Okruhlica
 **********************************************************************************************************************/
@@ -162,14 +162,13 @@ int main(void)
     int userChoice;
     int iErr = E_OK;
 
-    CON_Init();
-
     do
     {
+        CON_Init();
         printf("------NUMERICAL INTEGRATION IN C------\n");
         printf("Polynomial Function: 4x^4 + 7x^3 - 4x + 14\n");
         printf("Trigonometric Function: 18 * sin(x)\n");
-        printf("Predefined Intervall: [%f, %f]\n\n", CON_Config.a, CON_Config.b);
+        printf("Predefined Intervall: [%.2f, %.2f]\n\n", CON_Config.a, CON_Config.b);
         printf("Type the number to choose the action:\n\n");
         printf("1. Calculate the integral of Polynomial Function\n");
         printf("2. Calculate the integral of Trigonometric Function\n");
@@ -258,7 +257,7 @@ int main(void)
         }
         else 
         {
-            iErr = E_EXIT; /* If invalid input, terminate program*/
+            iErr = E_EXIT; /* If invalid input, terminate program */
         }
 
     } while (iErr >= 0);

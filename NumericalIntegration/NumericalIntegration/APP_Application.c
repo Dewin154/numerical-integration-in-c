@@ -122,7 +122,7 @@ int APP_CalculateIntegral(const float (*function)(float x), float a, float b, un
 * param[in]    arrayOfN          Array containing different step counts N
 * param[in]    resultPolynomial  Pointer to the analytical reference result
 *
-* param[out]   pTestContainerResults     Pointer to the container for results and accuracy
+* param[out]   pTestContainerResults     Pointer to the container for accuracy results
 *
 * retval       E_OK                      Test run successful
 * retval       E_FUNCTION_NULL_POINTER   Function pointer is null
@@ -191,7 +191,7 @@ int APP_RunTestPolynomial(const float (*function)(float x), float a, float b, co
 * param[in]    arrayOfN             Array containing different step counts N
 * param[in]    resultTrigonometric  Pointer to the analytical reference result
 *
-* param[out]   pTestContainerResults     Pointer to the container for results and accuracy
+* param[out]   pTestContainerResults     Pointer to the container for accuracy results
 *
 * retval       E_OK                      Test run successful
 * retval       E_FUNCTION_NULL_POINTER   Function pointer is null
@@ -222,7 +222,6 @@ int APP_RunTestTrigonometric(const float (*function)(float x), float a, float b,
 
             if (iErr != E_OK)
             {
-                iErr = E_NOT_OK;
                 break;
             }
             else
