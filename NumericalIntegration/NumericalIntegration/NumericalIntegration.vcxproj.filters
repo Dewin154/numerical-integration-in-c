@@ -39,7 +39,7 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="NIN_Integration_cfg.h">
-      <Filter>Quelldateien</Filter>
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

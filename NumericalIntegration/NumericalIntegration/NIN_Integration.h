@@ -52,8 +52,6 @@ extern int NIN_Trapezoid(const float (*function)(float x), float a, float b, uns
 
 extern int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult);
 
-extern int NIN_Init(void);
-
 extern int NIN_GetVersion(unsigned char* major, unsigned char* minor, unsigned char* patch);
 
 #endif /* _NIN_INTEGRATION_H_ */

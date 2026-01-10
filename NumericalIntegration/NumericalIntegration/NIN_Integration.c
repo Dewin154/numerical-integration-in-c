@@ -27,11 +27,12 @@ author      Peter Okruhlica
 
 Version   Date        Sign  Description
 --------  ----------  ----  -----------
-01.00.00  2025-12-19  PO   Initial check in
-01.00.01  2025-12-24  PO   Prototype implementation of integration
-01.01.00  2025-12-26  PO   Refining structure in context of embedded development
-01.01.01  2025-12-28  PO   Adding unified comments
-01.01.02  2025-01-02  PO   Remove dead code
+01.00.00  2025-12-19  PO    Initial check in
+01.00.01  2025-12-24  PO    Prototype implementation of integration
+01.01.00  2025-12-26  PO    Refining structure in context of embedded development
+01.01.01  2025-12-28  PO    Adding unified comments
+01.01.02  2026-01-02  PO    Remove dead code
+01.01.03  2026-01-06  PO    Clean code, move validation of params to separate function
 
 **********************************************************************************************************************/
 
@@ -49,146 +50,38 @@ MACROS
 
 #define NIN_MAJOR_VERSION 01
 #define NIN_MINOR_VERSION 01
-#define NIN_PATCH_VERSION 01
+#define NIN_PATCH_VERSION 03
 
 /**********************************************************************************************************************
-TYPEDEFS
+PROTOTYPES
 **********************************************************************************************************************/
 
-typedef struct {
-
-    int rectangleLastError;
-    int trapezoidLastError;
-    int simpsonLastError;
-
-}t_NIN_GlobalState;
-
-/**********************************************************************************************************************
-GLOBAL VARIABLES
-**********************************************************************************************************************/
-
-static t_NIN_GlobalState NIN_GlobalState;
+static int validateParameters(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult);
 
 /**********************************************************************************************************************
 FUNCTIONS
 **********************************************************************************************************************/
 
 /*********************************************************************************************************************/
-/*  Initialises the module with clean variables and states
+/* Internal helper function to validate input parameters for integration methods
 *
-*   retval       E_OK         Succesful call
+* param[in]    function  Pointer to the mathematical function f(x) to be integrated
+* param[in]    a         Start of the integration interval
+* param[in]    b         End of the integration interval
+* param[in]    n         Number of steps (must be > 0 and <= MAX_ITERATIONS)
+* param[in]    pResult   Pointer to the variable where the calculation result will be stored
 *
-*   author       Peter Okruhlica
+* retval       E_OK                         Parameters are valid
+* retval       E_INVALID_N                  Invalid number of iterations
+* retval       E_TOO_MANY_ITERATIONS        Too many iterations
+* retval       E_INVALID_INTERVAL           Interval is invalid (b <= a)
+* retval       E_FUNCTION_NULL_POINTER      Function pointer is null
+* retval       E_VARIABLE_NULL_POINTER      Variable pointer is null
+*
+* author       Peter Okruhlica
 **********************************************************************************************************************/
-int NIN_Init(void)
+static int validateParameters(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult)
 {
-    int iErr = E_OK;
-    
-    NIN_GlobalState.rectangleLastError = E_OK;
-    NIN_GlobalState.trapezoidLastError = E_OK;
-    NIN_GlobalState.simpsonLastError = E_OK;
-
-    return iErr;
-}
-
-/*********************************************************************************************************************/
-/*  Approximates the integral with rectangle method
-*
-*   Upon calling this function, it first checks if all parameters are valid. If not, execution is stopped and corresponding
-*   error code is returned. If all parameters are valid, the function approximates the integral of the given function, its 
-*   interval based on the number of interations with the rectangle method.
-*
-*   param[in]    function  Pointer to the mathematical function f(x) to be integrated
-*   param[in]    a         Start of the integration interval
-*   param[in]    b         End of the integration interval
-*   param[in]    n         Number of steps (must be > 0 and <= MAX_ITERATIONS)
-*
-*   param[out]   pResult   Pointer to the variable where the calculation result will be stored
-*
-*
-*   retval       E_OK                            Calculation successful
-*   retval       E_INVALID_N                     Invalid number of iterations was passed
-*   retval       E_TOO_MANY_ITERATIONS           Too many iterations were passed
-*   retval       E_INVALID_INTERVAL              Calculated integral is not valid
-*   retval       E_FUNCTION_NULL_POINTER         Function pointer is null
-*   retval       E_VARIABLE_NULL_POINTER         Variable pointer is null
-* 
-*   author       Peter Okruhlica
-**********************************************************************************************************************/
-int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult)
-{
-
-	int iErr = E_OK;
-    float intervalDifference = b - a;
-
-    if (n == 0)
-    {
-		iErr = E_INVALID_N;
-	}
-	else if (n > MAX_ITERATIONS)
-	{
-		iErr = E_TOO_MANY_ITERATIONS;
-	}
-	else if (intervalDifference <= 0) 
-	{
-		iErr = E_INVALID_INTERVAL;
-	}
-	else if (function == NULL)
-	{
-		iErr = E_FUNCTION_NULL_POINTER;
-	}
-	else if (pResult == NULL) 
-	{
-		iErr = E_VARIABLE_NULL_POINTER;
-	}
-	else 
-	{
-		float hCoefficient = intervalDifference / n;
-		float summation = 0;
-		float result = 0;
-		float rectangleStep = 0;
-
-		for (int i = 0; i < n; i++)
-		{
-			rectangleStep = a + (i * hCoefficient);
-            summation += function(rectangleStep);
-		}
-
-		result = summation * hCoefficient;
-		*pResult = result;
-	}
-
-    NIN_GlobalState.rectangleLastError = iErr;
-	return iErr;
-}
-
-/*********************************************************************************************************************/
-/*  Approximates the integral with trapezoid method
-*
-*   Upon calling this function, it first checks if all parameters are valid. If not, execution is stopped and corresponding
-*   error code is returned. If all parameters are valid, the function approximates the integral of the given function, its
-*   interval based on the number of interations with the trapezoid method.
-*
-*   param[in]    function  Pointer to the mathematical function f(x) to be integrated
-*   param[in]    a         Start of the integration interval
-*   param[in]    b         End of the integration interval
-*   param[in]    n         Number of steps (must be > 0 and <= MAX_ITERATIONS)
-*
-*   param[out]   pResult   Pointer to the variable where the calculation result will be stored
-*
-*
-*   retval       E_OK                            Calculation successful
-*   retval       E_INVALID_N                     Invalid number of iterations was passed
-*   retval       E_TOO_MANY_ITERATIONS           Too many iterations were passed
-*   retval       E_INVALID_INTERVAL              Calculated integral is not valid
-*   retval       E_FUNCTION_NULL_POINTER         Function pointer is null
-*   retval       E_VARIABLE_NULL_POINTER         Variable pointer is null
-*
-*   author       Peter Okruhlica
-**********************************************************************************************************************/
-int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult)
-{
-
     int iErr = E_OK;
     float intervalDifference = b - a;
 
@@ -208,12 +101,94 @@ int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned s
     {
         iErr = E_FUNCTION_NULL_POINTER;
     }
-    else if (pResult == NULL) 
+    else if (pResult == NULL)
     {
         iErr = E_VARIABLE_NULL_POINTER;
     }
-    else 
+
+    return iErr;
+}
+
+/*********************************************************************************************************************/
+/* Approximates the integral with rectangle method
+*
+* Upon calling this function, it first checks if all parameters are valid. If not, execution is stopped and corresponding
+* error code is returned. If all parameters are valid, the function approximates the integral of the given function, its
+* interval based on the number of interations with the rectangle method.
+*
+* param[in]    function  Pointer to the mathematical function f(x) to be integrated
+* param[in]    a         Start of the integration interval
+* param[in]    b         End of the integration interval
+* param[in]    n         Number of steps (must be > 0 and <= MAX_ITERATIONS)
+*
+* param[out]   pResult   Pointer to the variable where the calculation result will be stored
+*
+*
+* retval       E_OK                            Calculation successful
+* retval       E_INVALID_N                     Invalid number of iterations was passed
+* retval       E_TOO_MANY_ITERATIONS           Too many iterations were passed
+* retval       E_INVALID_INTERVAL              Calculated integral is not valid
+* retval       E_FUNCTION_NULL_POINTER         Function pointer is null
+* retval       E_VARIABLE_NULL_POINTER         Variable pointer is null
+* 
+* author       Peter Okruhlica
+**********************************************************************************************************************/
+int NIN_Rectangle(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult)
+{
+    int iErr = validateParameters(function, a, b, n, pResult);
+
+    if (iErr == E_OK)
     {
+        float intervalDifference = b - a;
+        float hCoefficient = intervalDifference / n;
+        float summation = 0;
+        float result = 0;
+        float rectangleStep = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            rectangleStep = a + (i * hCoefficient);
+            summation += function(rectangleStep);
+        }
+
+        result = summation * hCoefficient;
+        *pResult = result;
+    }
+
+    return iErr;
+}
+
+/*********************************************************************************************************************/
+/* Approximates the integral with trapezoid method
+*
+* Upon calling this function, it first checks if all parameters are valid. If not, execution is stopped and corresponding
+* error code is returned. If all parameters are valid, the function approximates the integral of the given function, its
+* interval based on the number of interations with the trapezoid method.
+*
+* param[in]    function  Pointer to the mathematical function f(x) to be integrated
+* param[in]    a         Start of the integration interval
+* param[in]    b         End of the integration interval
+* param[in]    n         Number of steps (must be > 0 and <= MAX_ITERATIONS)
+*
+* param[out]   pResult   Pointer to the variable where the calculation result will be stored
+*
+*
+* retval       E_OK                            Calculation successful
+* retval       E_INVALID_N                     Invalid number of iterations was passed
+* retval       E_TOO_MANY_ITERATIONS           Too many iterations were passed
+* retval       E_INVALID_INTERVAL              Calculated integral is not valid
+* retval       E_FUNCTION_NULL_POINTER         Function pointer is null
+* retval       E_VARIABLE_NULL_POINTER         Variable pointer is null
+*
+* author       Peter Okruhlica
+**********************************************************************************************************************/
+int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult)
+{
+    int iErr = validateParameters(function, a, b, n, pResult);
+
+    if (iErr == E_OK)
+    {
+        float intervalDifference = b - a;
         float hCoefficient = intervalDifference / n;
         float termCoefficient = hCoefficient / 2.0F;
         float functionLowerBound = function(a);
@@ -226,7 +201,7 @@ int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned s
         for (int i = 1; i < n; i++)
         {
             trapezoidStep = a + (i * hCoefficient);
-            summation += (2 * function(trapezoidStep));
+            summation += (2 * function(trapezoidStep)); 
         }
 
         result = functionLowerBound + summation + functionUpperBound;
@@ -234,62 +209,40 @@ int NIN_Trapezoid(const float (*function)(float x), float a, float b, unsigned s
         *pResult = result;
     }
 
-    NIN_GlobalState.trapezoidLastError = iErr;
     return iErr;
 }
 
 /*********************************************************************************************************************/
-/*  Approximates the integral with simpson method
+/* Approximates the integral with simpson method
 *
-*   Upon calling this function, it first checks if all parameters are valid. If not, execution is stopped and corresponding
-*   error code is returned. If all parameters are valid, the function approximates the integral of the given function, its
-*   interval based on the number of interations with the simpson method.
+* Upon calling this function, it first checks if all parameters are valid. If not, execution is stopped and corresponding
+* error code is returned. If all parameters are valid, the function approximates the integral of the given function, its
+* interval based on the number of interations with the simpson method.
 *
-*   param[in]    function  Pointer to the mathematical function f(x) to be integrated
-*   param[in]    a         Start of the integration interval
-*   param[in]    b         End of the integration interval
-*   param[in]    n         Number of steps (must be > 0 and <= MAX_ITERATIONS)
+* param[in]    function  Pointer to the mathematical function f(x) to be integrated
+* param[in]    a         Start of the integration interval
+* param[in]    b         End of the integration interval
+* param[in]    n         Number of steps (must be > 0 and <= MAX_ITERATIONS)
 *
-*   param[out]   pResult   Pointer to the variable where the calculation result will be stored
+* param[out]   pResult   Pointer to the variable where the calculation result will be stored
 *
 *
-*   retval       E_OK                            Calculation successful
-*   retval       E_INVALID_N                     Invalid number of iterations was passed
-*   retval       E_TOO_MANY_ITERATIONS           Too many iterations were passed
-*   retval       E_INVALID_INTERVAL              Calculated integral is not valid
-*   retval       E_FUNCTION_NULL_POINTER         Function pointer is null
-*   retval       E_VARIABLE_NULL_POINTER         Variable pointer is null
+* retval       E_OK                            Calculation successful
+* retval       E_INVALID_N                     Invalid number of iterations was passed
+* retval       E_TOO_MANY_ITERATIONS           Too many iterations were passed
+* retval       E_INVALID_INTERVAL              Calculated integral is not valid
+* retval       E_FUNCTION_NULL_POINTER         Function pointer is null
+* retval       E_VARIABLE_NULL_POINTER         Variable pointer is null
 *
-*   author       Peter Okruhlica
+* author       Peter Okruhlica
 **********************************************************************************************************************/
 int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned short n, float* const pResult)
 {
+    int iErr = validateParameters(function, a, b, n, pResult);
 
-    int iErr = E_OK;
-    float intervalDifference = b - a;
-
-    if (n == 0) 
+    if (iErr == E_OK)
     {
-        iErr = E_INVALID_N;
-    }
-    else if (n > MAX_ITERATIONS)
-    {
-        iErr = E_TOO_MANY_ITERATIONS;
-    }
-    else if (intervalDifference <= 0) 
-    {
-        iErr = E_INVALID_INTERVAL;
-    }
-    else if (function == NULL)
-    {
-        iErr = E_FUNCTION_NULL_POINTER;
-    }
-    else if (pResult == NULL)
-    {
-        iErr = E_VARIABLE_NULL_POINTER;
-    }
-    else
-    {
+        float intervalDifference = b - a;
         float hCoefficient = intervalDifference / n;
         float termCoefficient = hCoefficient / 3.0F;
         float functionLowerBound = function(a);
@@ -300,12 +253,12 @@ int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned sho
         float result = 0;
         float simpsonStep = 0;
 
-        int firstSummationBoundary = n / 2;
-        int secondSummationBoundary = (n / 2) - 1;
+        int firstSummationBoundary = (n >> 1); /* (n / 2) */
+        int secondSummationBoundary = (n >> 1) - 1; /* (n / 2) */
 
         for (int i = 1; i <= firstSummationBoundary; i++)
         {
-            simpsonStep = a + ((2 * i - 1) * hCoefficient);
+            simpsonStep = a + (((i << 1) - 1) * hCoefficient); /* i << 1 == i * 2 */
             firstSummation += function(simpsonStep);
         }
 
@@ -313,7 +266,7 @@ int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned sho
 
         for (int i = 1; i <= secondSummationBoundary; i++)
         {
-            simpsonStep = a + ((2 * i) * hCoefficient);
+            simpsonStep = a + ((i << 1) * hCoefficient); /* i << 1 == i * 2 */
             secondSummation += function(simpsonStep);
         }
 
@@ -324,7 +277,6 @@ int NIN_Simpson(const float (*function)(float x), float a, float b, unsigned sho
         *pResult = result;
     }
 
-    NIN_GlobalState.simpsonLastError = iErr;
     return iErr;
 }
 

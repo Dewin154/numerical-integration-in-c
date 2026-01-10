@@ -1,7 +1,8 @@
 ﻿/**********************************************************************************************************************
+
 ***********************************************************************************************************************
 *                                                                                                                     *
-* Copyright (c) 2026, Your Company. All rights reserved!                                                              *
+* Copyright (c) 2025, Your Company. All rights reserved!                                                              *
 *                                                                                                                     *
 * All rights exclusively reserved for Your Company, unless expressly otherwise agreed.                                *
 *                                                                                                                     *
@@ -28,6 +29,9 @@ Version   Date        Sign  Description
 --------  ----------  ----  -----------
 01.00.00  2025-12-31  PO    Initial implementation
 01.01.00  2026-01-04  PO    Refactoring, added input validation and moved constants to main for better reusability
+01.01.01  2026-01-08  PO    Remove redundant function
+01.02.00  2026-01-09  PO    Encapsulated variables in struct and added CON_Init
+01.03.00  2026-01-10  PO    Add do while loop
 
 **********************************************************************************************************************/
 
@@ -49,8 +53,34 @@ MACROS
 **********************************************************************************************************************/
 
 #define CON_MAJOR_VERSION 01
-#define CON_MINOR_VERSION 01
+#define CON_MINOR_VERSION 03
 #define CON_PATCH_VERSION 00
+
+/**********************************************************************************************************************
+TYPEDEFS
+**********************************************************************************************************************/
+
+typedef struct {
+
+    float (*pPolynomialFunction)(float x);
+    float (*pTrigonometricFunction)(float x);
+
+    float resultPolynomial;
+    float resultTrigonometric;
+
+    float a;
+    float b;
+
+    unsigned short n;
+    unsigned short testSteps[3];
+
+} t_CON_Config;
+
+/**********************************************************************************************************************
+GLOBAL VARIABLES
+**********************************************************************************************************************/
+
+static t_CON_Config CON_Config;
 
 /**********************************************************************************************************************
 FUNCTIONS
@@ -85,82 +115,61 @@ float trigonometricFunction(float x)
 }
 
 /*********************************************************************************************************************/
-/* Validates the configuration parameters before the main execution starts.
+/* Initializes the CON module configuration with default values.
 *
-* Checks if the interval is valid and if reference values are non-zero to prevent
-* division by zero errors in the application module.
-*
-* param[in]    refPoly   Reference result for the polynomial function
-* param[in]    refTri    Reference result for the trigonometric function
-* param[in]    a         Start of integration interval
-* param[in]    b         End of integration interval
-*
-* retval       E_OK               Input is valid
-* retval       E_INVALID_INTERVAL Interval is invalid
-* retval       E_NOT_OK           Reference values are invalid
+* retval       E_OK    Initialization successful
 *
 * author       Peter Okruhlica
 **********************************************************************************************************************/
-static int CON_ValidateInput(float refPoly, float refTri, short a, short b)
+int CON_Init(void)
 {
     int iErr = E_OK;
 
-    if (b <= a)
-    {
-        iErr = E_INVALID_INTERVAL;
-    }
+    CON_Config.pPolynomialFunction = &polynomialFunction;
+    CON_Config.pTrigonometricFunction = &trigonometricFunction;
 
-    if ((refPoly == 0.0F) || (refTri == 0.0F))
-    {
-        iErr = E_NOT_OK;
-    }
+    CON_Config.resultPolynomial = 2839480.0F;
+    CON_Config.resultTrigonometric = 10.655F;
+
+    CON_Config.a = 0.0F;
+    CON_Config.b = 20.0F;
+
+    CON_Config.n = 10;
+
+    CON_Config.testSteps[0] = 10;
+    CON_Config.testSteps[1] = 50;
+    CON_Config.testSteps[2] = 100;
 
     return iErr;
 }
 
 /*********************************************************************************************************************/
-/* brief       Main function of the application
+/* brief        Main function of the application
 *
 * Initializes data, validates inputs and handles the user menu loop.
 * Calls the APP module to perform calculations and displays the results.
 *
-* retval       E_OK    Program finished successfully
-* retval       E_EXIT  Program terminated by user or error
+* retval        E_OK    Program finished successfully
+* retval        E_EXIT  Program terminated by user or error
 *
-* author       Peter Okruhlica
+* author        Peter Okruhlica
 **********************************************************************************************************************/
 int main(void)
 {
     t_APP_ContainerResults APP_TestResults;
     t_APP_SingleResult APP_SingleResult;
 
-    float (*pPolynomialFunction) (float x) = &polynomialFunction;
-    float (*pTrigonometricFunction) (float x) = &trigonometricFunction;
-
-    const float resultPolynomial = 2839480.0F;
-    const float resultTrigonometric = 10.655F;
-
-    const short a = 0;
-    const short b = 20;
-
-    const unsigned short n = 10;
-    const unsigned short testSteps[3] = { 10, 50, 100 };
-
     int userChoice;
     int iErr = E_OK;
 
-    iErr = CON_ValidateInput(resultPolynomial, resultTrigonometric, a, b);
+    CON_Init();
 
-    if (iErr != E_OK)
-    {
-        printf("CRITICAL ERROR: Invalid Configuration Parameters\n");
-    }
-    else
+    do
     {
         printf("------NUMERICAL INTEGRATION IN C------\n");
         printf("Polynomial Function: 4x^4 + 7x^3 - 4x + 14\n");
         printf("Trigonometric Function: 18 * sin(x)\n");
-        printf("Predefined Intervall: [%d, %d]\n\n", a, b);
+        printf("Predefined Intervall: [%f, %f]\n\n", CON_Config.a, CON_Config.b);
         printf("Type the number to choose the action:\n\n");
         printf("1. Calculate the integral of Polynomial Function\n");
         printf("2. Calculate the integral of Trigonometric Function\n");
@@ -173,7 +182,7 @@ int main(void)
 
         if (userChoice == 1)
         {
-            iErr = APP_CalculateIntegral(pPolynomialFunction, a, b, n, &APP_SingleResult);
+            iErr = APP_CalculateIntegral(CON_Config.pPolynomialFunction, CON_Config.a, CON_Config.b, CON_Config.n, &APP_SingleResult);
 
             if (iErr != E_OK)
             {
@@ -181,30 +190,32 @@ int main(void)
             }
             else
             {
-                printf("Results (N=%d):\n", n);
+                printf("Results (N=%d):\n", CON_Config.n);
                 printf("Rectangle: %.3f\n", APP_SingleResult.resultRectangle);
                 printf("Trapezoid: %.3f\n", APP_SingleResult.resultTrapezoid);
-                printf("Simpson:   %.3f\n", APP_SingleResult.resultSimpson);
+                printf("Simpson:   %.3f\n\n", APP_SingleResult.resultSimpson);
             }
         }
         else if (userChoice == 2)
         {
-            iErr = APP_CalculateIntegral(pTrigonometricFunction, a, b, n, &APP_SingleResult);
+            iErr = APP_CalculateIntegral(CON_Config.pTrigonometricFunction, CON_Config.a, CON_Config.b, CON_Config.n, &APP_SingleResult);
+
             if (iErr != E_OK)
             {
                 printf("Error while calculating integral of trigonometric function!\n\n");
             }
             else
             {
-                printf("Results (N=%d):\n", n);
+                printf("Results (N=%d):\n", CON_Config.n);
                 printf("Rectangle: %.3f\n", APP_SingleResult.resultRectangle);
                 printf("Trapezoid: %.3f\n", APP_SingleResult.resultTrapezoid);
-                printf("Simpson:   %.3f\n", APP_SingleResult.resultSimpson);
+                printf("Simpson:   %.3f\n\n", APP_SingleResult.resultSimpson);
             }
         }
         else if (userChoice == 3)
         {
-            iErr = APP_RunTestPolynomial(pPolynomialFunction, a, b, testSteps, &resultPolynomial, &APP_TestResults);
+            iErr = APP_RunTestPolynomial(CON_Config.pPolynomialFunction, CON_Config.a, CON_Config.b, CON_Config.testSteps, &CON_Config.resultPolynomial, &APP_TestResults);
+
             if (iErr != E_OK)
             {
                 printf("Error while running polynomial test!\n\n");
@@ -214,16 +225,16 @@ int main(void)
                 printf("--- Accuracy Results (Polynomial) ---\n");
                 for (int i = 0; i < NUM_TEST_CASES; i++)
                 {
-                    printf("\nN = %d:\n", testSteps[i]);
+                    printf("\nN = %d:\n", CON_Config.testSteps[i]);
                     printf("Rectangle: %.3f%%\n", APP_TestResults.rectangle.accuracy[i]);
                     printf("Trapezoid: %.3f%%\n", APP_TestResults.trapezoid.accuracy[i]);
-                    printf("Simpson:   %.3f%%\n", APP_TestResults.simpson.accuracy[i]);
+                    printf("Simpson:   %.3f%%\n\n", APP_TestResults.simpson.accuracy[i]);
                 }
             }
         }
         else if (userChoice == 4)
         {
-            iErr = APP_RunTestTrigonometric(pTrigonometricFunction, a, b, testSteps, &resultTrigonometric, &APP_TestResults);
+            iErr = APP_RunTestTrigonometric(CON_Config.pTrigonometricFunction, CON_Config.a, CON_Config.b, CON_Config.testSteps, &CON_Config.resultTrigonometric, &APP_TestResults);
 
             if (iErr != E_OK)
             {
@@ -234,18 +245,24 @@ int main(void)
                 printf("--- Accuracy Results (Trigonometric) ---\n");
                 for (int i = 0; i < NUM_TEST_CASES; i++)
                 {
-                    printf("\nN = %d:\n", testSteps[i]);
+                    printf("\nN = %d:\n", CON_Config.testSteps[i]);
                     printf("Rectangle: %.3f%%\n", APP_TestResults.rectangle.accuracy[i]);
                     printf("Trapezoid: %.3f%%\n", APP_TestResults.trapezoid.accuracy[i]);
-                    printf("Simpson:   %.3f%%\n", APP_TestResults.simpson.accuracy[i]);
+                    printf("Simpson:   %.3f%%\n\n", APP_TestResults.simpson.accuracy[i]);
                 }
             }
         }
-        else
+        else if (userChoice == 5)
         {
             iErr = E_EXIT;
         }
-    }
+        else 
+        {
+            iErr = E_EXIT; /* If invalid input, terminate program*/
+        }
+
+    } while (iErr >= 0);
+
     return iErr;
 }
 

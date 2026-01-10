@@ -70,9 +70,9 @@ typedef struct {
 EXTERNAL FUNCTIONS
 **********************************************************************************************************************/
 
-extern int APP_RunTestPolynomial(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], const float* resultPolynomial, t_APP_ContainerResults* pDest);
+extern int APP_RunTestPolynomial(const float (*function)(float x), float a, float b, const unsigned short* const arrayOfN, const float* const resultPolynomial, t_APP_ContainerResults* pDest);
 
-extern int APP_RunTestTrigonometric(const float (*function)(float x), float a, float b, const unsigned short arrayOfN[], const float* resultTrigonometric, t_APP_ContainerResults* pDest);
+extern int APP_RunTestTrigonometric(const float (*function)(float x), float a, float b, const unsigned short* const arrayOfN, const float* const resultTrigonometric, t_APP_ContainerResults* pDest);
 
 extern int APP_CalculateIntegral(const float (*function)(float x), float a, float b, unsigned short n, t_APP_SingleResult* pResult);
 
